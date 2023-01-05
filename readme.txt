@@ -14,3 +14,4 @@ v1.00
 - the way how values load from owner.xdd file change
 - after open a new window you cannot use previous window
 - now you can set your own statut!
+s
