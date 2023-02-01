@@ -1,0 +1,97 @@
+from tkinter import LabelFrame
+from tkinter import Button
+from tkinter import ttk
+from tkinter import *
+
+import sqlite3
+
+from os import startfile
+
+from tkinter import messagebox 
+import PDF_Writer
+import C_help_class as hc
+import C_Attributes
+
+def data_base():
+    def view_click():
+        x = tree.focus()
+        details = tree.item(x, 'values')
+        name = "SELECT * from klienci where oid= " + details[5]
+        db = sqlite3.connect('data/baza_dokumenty.db')
+        curr = db.cursor()
+        curr.execute(name)
+        r = curr.fetchone()
+        document = C_Attributes.attributes(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13])
+        db.commit()
+        db.close()
+        
+        PDF_Writer.create_pdf(document)
+        startfile("pdf.pdf")
+        
+    def edit_click():
+        pass
+    
+    def delete_click():
+        x = tree.focus()
+        details = tree.item(x, 'values')
+        help_z = messagebox.askyesno("Ostrzeżenie!","Czy na pewno chcesz usunąć dokument nr: " + details[0]+" ?")
+        if help_z == 1:
+            db = sqlite3.connect('data/baza_dokumenty.db')
+            curr = db.cursor()
+            
+            help_f = "DELETE FROM klienci WHERE oid = " + details[5]
+            curr.execute(help_f)
+            db.commit()
+            db.close()
+            tree.delete(x)
+        
+    database = sqlite3.connect('data/baza_dokumenty.db')
+    table = []
+    try:
+        c = database.cursor()
+        c.execute("SELECT *, rowid FROM klienci")
+    except sqlite3.OperationalError:
+        C_Attributes.dd.Create_data_base()
+        messagebox.showerror("Błąd!","Uszkodzony plik z bazą danych! Zaczekaj kilka sekund!")
+    finally:
+        records = c.fetchall()
+        records.reverse()
+        for r in records:
+            table.append(C_Attributes.attributes(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13],oid=r[14]))
+        database.commit()
+        database.close()
+        baza_screen = hc.ME_new_window('Baza Dokumentów',"780x400+20+20")
+        
+        tree = ttk.Treeview(baza_screen.screen_handle, columns=('nr_dok','zleceniobiorca','cena','data','termin','id'))
+        s = ttk.Scrollbar(baza_screen.screen_handle, orient=VERTICAL, command=tree.yview)
+        tree['yscrollcommand'] = s.set
+        
+        s.grid(column=1, row=0, sticky=(N,S))
+        tree.grid(column=0,row=0,padx=50,pady=20)
+        
+        frame1 = LabelFrame(baza_screen.screen_handle,text="Funkcje")
+        frame1.grid(column=0,row=1,padx=20,pady=20)
+        
+        button_delete = Button(frame1, text="Usuń pozycję", padx=20,pady=5,command=delete_click)
+        button_delete.grid(row=0,column=0,padx=40,pady=15)
+        button_edit = Button(frame1, text="Edytuj pozycję", padx=20,pady=5,command=edit_click)
+        button_edit.grid(row=0,column=1,padx=40,pady=15)
+        button_view = Button(frame1, text="Pokaż rekord", padx=20,pady=5,command=view_click)
+        button_view.grid(row=0,column=2,padx=40,pady=15)
+        
+        tree.column("#0", width=0,stretch='NO')
+        tree.column('nr_dok', width=150, anchor='center')
+        tree.column('zleceniobiorca', width=250, anchor='center')
+        tree.column('cena', width=80, anchor='center')
+        tree.column('data', width=80, anchor='center')
+        tree.column('termin', width=80, anchor='center')
+        tree.column("id", width=0,stretch='NO')
+        
+        tree.heading('#0',text='',anchor='w')
+        tree.heading('nr_dok', text = 'Numer Dokumentu')
+        tree.heading('zleceniobiorca', text='zleceniobiorca')
+        tree.heading('cena', text='cena')
+        tree.heading('data', text='data')
+        tree.heading('termin', text='termin')
+        for a in range(len(table)):
+            id = tree.insert('', 'end',iid=a,values=(table[a].do, table[a].zlece2, table[a].st,table[a].da,table[a].te,table[a].oid))

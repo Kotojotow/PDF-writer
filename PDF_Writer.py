@@ -12,7 +12,7 @@ def forbidden_chars(a):
     a=a.replace("*","_")
     return a
 
-def create_pdf(wc,at):
+def create_pdf(wc):
     # create FPDF object
     a_wys=10
     pdf = FPDF('P', 'mm', 'A4')
@@ -102,13 +102,13 @@ def create_pdf(wc,at):
     
     pdf.add_page()
     pdf.set_font_size(11)
-    pdf.multi_cell(190,6,txt=at.own_statut)
+    pdf.multi_cell(190,6,txt=wc.own_statut)
     pdf.cell(190,6,ln = 1 )
     pdf.multi_cell(0,6 ,txt="           Zleceniodawca                                                                               Zleceniobiorca\n   ( data, pieczątka, podpis)                                                              ( data, pieczątka, podpis)\n   ........................................                                                              ........................................")
 
-    if wc.do_save == 1:
+    if wc.do_save == 1 and wc.own_dir != "":
         file_name = forbidden_chars(wc.do) + ".pdf"
-        file_dir = at.own_dir+"/"+file_name
+        file_dir = wc.own_dir+"/"+file_name
         pdf.output(file_dir)
     else:
         pdf.output("pdf.pdf")

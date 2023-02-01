@@ -14,4 +14,8 @@ v1.00
 - the way how values load from owner.xdd file change
 - after open a new window you cannot use previous window
 - now you can set your own statut!
-s
+
+v1.02
+- Documents view lap shown as a treeview now
+	- delete document button has appear
+- order of source file has change for more reliable

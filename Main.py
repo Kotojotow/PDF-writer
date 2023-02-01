@@ -5,16 +5,20 @@ import tkinter
 from tkinter import Button
 from tkinter import messagebox 
 from tkinter import Tk
-from tkinter import Toplevel
 
 from datetime import datetime
 from datetime import date
 
-import window_class as wc
-import help_class as hc
+import test 
+import F_owner_edit 
+import F_statut_edit 
+import F_data_base 
+import F_Path_edit
+import C_help_class as hc
+import C_Attributes as wc
 import PDF_Writer
 
-program_version = "1.01"
+program_version = "1.02"
 
 def check_out():
     wc.dd.zlece1 = hc.five_string(zlec1.win_entry.get(),zlec2.win_entry.get(),zlec3.win_entry.get(),zlec4.win_entry.get(),zlec5.win_entry.get() )
@@ -31,12 +35,12 @@ def check_out():
     wc.dd.op = str(opi.win_entry.get())
     wc.dd.do = str(dok.win_entry.get())
     wc.dd.da = str(dat.win_entry.get())
-    PDF_Writer.create_pdf(wc.dd,wc.atrybut)
+    PDF_Writer.create_pdf(wc.dd)
     startfile("pdf.pdf")
     pomoc = messagebox.askyesno("Czy chcesz zapisać dokument?","Zapisane dokumenty można otworzyć ponownie później!")
     if pomoc == 1:
         file_name = PDF_Writer.forbidden_chars(wc.dd.do) + ".pdf"
-        file_dir = wc.atrybut.own_dir+"/"+file_name
+        file_dir = wc.dd.own_dir+"/"+file_name
         is_file = path.isfile(file_dir)
         if is_file == 1:
             pomoc1 = messagebox.askokcancel("Dokument już istnieje!","Dokument o takiej nazwie już istnieje, chcesz go nadpisać?")
@@ -51,33 +55,45 @@ MainWindow = Tk()
 MainWindow.title('PDF Writer')
 MainWindow.geometry("820x570+10+10")
 MainWindow.iconbitmap('icons/icon.ico')
-                                                                                                                                         
+                                                              
 menubar = tkinter.Menu(MainWindow)
 MainWindow.config(menu=menubar)
 
 now = datetime.now()
 wc.dd.Create_data_base()
-filemenu = tkinter.Menu(menubar,tearoff=0)
-filemenu.add_command(label='Przegląd Dokumentów',command=wc.dd.baza_danych)
-filemenu.add_command(label='Ustal folder dla dokumentów',command=wc.atrybut.path_edit)
-filemenu.add_separator()
-filemenu.add_command(label='Zmień Dane Firmy',command=wc.atrybut.owner_edit)
-filemenu.add_command(label='Zmień Regulamin',command=wc.atrybut.def_statut)
+options = tkinter.Menu(menubar,tearoff=0)
+options.add_command(label='Ustal folder dla dokumentów',command=F_Path_edit.path_edit)
+options.add_command(label='Zmień Dane Firmy',command=F_owner_edit.F_owner_edit)
+options.add_command(label='Zmień Regulamin',command=F_statut_edit.F_statut_edit)
 
-menubar.add_cascade(label='Opcje',menu=filemenu)
+documents = tkinter.Menu(menubar,tearoff=0)
+documents.add_command(label='Dodaj Dokument')
+documents.add_command(label='Przegląd Dokumentów',command=F_data_base.data_base)
+
+clients = tkinter.Menu(menubar,tearoff=0)
+clients.add_command(label='Dodaj Klienta')
+clients.add_command(label='Przegląd klientów')
+
+menubar.add_cascade(label='Opcje',menu=options)
+menubar.add_cascade(label='Dokumenty',menu=documents)
+menubar.add_cascade(label='Klienci',menu=clients)
+
+
+
+##############################################
 
 zlec_label = hc.window_label1(MainWindow,"Zleceniodawca:",1,0)
 
 zlec1 = hc.window_label(MainWindow,"Nazwa:",0,1)
-zlec1.win_entry.insert(0, wc.atrybut.own_name1)
+zlec1.win_entry.insert(0, wc.dd.own_name1)
 zlec2 = hc.window_label(MainWindow,"Nazwa:",0,2)
-zlec2.win_entry.insert(0, wc.atrybut.own_name2)
+zlec2.win_entry.insert(0, wc.dd.own_name2)
 zlec3 = hc.window_label(MainWindow,"Adres:",0,3)
-zlec3.win_entry.insert(0, wc.atrybut.own_adres)
+zlec3.win_entry.insert(0, wc.dd.own_adres)
 zlec4 = hc.window_label(MainWindow,"Nip:",0,4)
-zlec4.win_entry.insert(0, wc.atrybut.own_nip)
+zlec4.win_entry.insert(0, wc.dd.own_nip)
 zlec5 = hc.window_label(MainWindow,"Kontakt:",0,5)
-zlec5.win_entry.insert(0, wc.atrybut.own_contact)
+zlec5.win_entry.insert(0, wc.dd.own_contact)
 
 zlec_label = hc.window_label1(MainWindow,"Zleceniobiorca:",3,0)
 
@@ -119,7 +135,7 @@ dok.win_entry.insert(0,str(now.day)+"/"+str(now.month)+"/"+str(now.year)+"/1")
 dat = hc.window_label(MainWindow,"Data Zadania:",2,17)
 dat.win_entry.insert(0,date.today() )
 
-view_button = Button(MainWindow, text="Podgląd",padx=50,pady=20, command= check_out )
-view_button.grid(column=3,row=23)
+view_button = Button(MainWindow, text="Podgląd",padx=350,pady=16, command= check_out )
+view_button.grid(column=0,row=23,columnspan=4,pady=15)
 
 MainWindow.mainloop()
