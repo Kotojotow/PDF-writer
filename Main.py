@@ -14,9 +14,10 @@ program_version = "1.02"
 ###########################################################
 # Main window and loop
 MainWindow = Tk()
-MainWindow.title('PDF Writer')
+MainWindow.title('PDF Writer') 
 MainWindow.geometry("820x570+10+10")
 MainWindow.iconbitmap('icons/icon.ico')
+MainWindow.attributes('-topmost', False)
                                                               
 menubar = tkinter.Menu(MainWindow)
 MainWindow.config(menu=menubar)

@@ -10,6 +10,7 @@ from os import startfile
 from tkinter import messagebox 
 import PDF_Writer
 import C_help_class as hc
+import C_Edit_record 
 import C_Attributes
 
 def data_base():
@@ -29,7 +30,18 @@ def data_base():
         startfile("pdf.pdf")
         
     def edit_click():
-        pass
+        x = tree.focus()
+        details = tree.item(x, 'values')
+        name = "SELECT *,rowid from klienci where oid= " + details[5]
+        db = sqlite3.connect('data/baza_dokumenty.db')
+        curr = db.cursor()
+        curr.execute(name)
+        r = curr.fetchone()
+        document = C_Attributes.attributes(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13],oid=r[14])
+        db.commit()
+        db.close()
+        
+        C_Edit_record.edit_document(document)
     
     def delete_click():
         x = tree.focus()
@@ -61,6 +73,8 @@ def data_base():
         database.commit()
         database.close()
         baza_screen = hc.ME_new_window('Baza Dokumentów',"780x400+20+20")
+        baza_screen.screen_handle.resizable(0,0)
+        baza_screen.screen_handle.attributes('-topmost', True)
         
         tree = ttk.Treeview(baza_screen.screen_handle, columns=('nr_dok','zleceniobiorca','cena','data','termin','id'))
         s = ttk.Scrollbar(baza_screen.screen_handle, orient=VERTICAL, command=tree.yview)
@@ -94,4 +108,4 @@ def data_base():
         tree.heading('data', text='data')
         tree.heading('termin', text='termin')
         for a in range(len(table)):
-            id = tree.insert('', 'end',iid=a,values=(table[a].do, table[a].zlece2, table[a].st,table[a].da,table[a].te,table[a].oid))
+            tree.insert('', 'end',iid=a,values=(table[a].do, hc.one_string(table[a].zlece2,first=1) , table[a].st,table[a].da,table[a].te,table[a].oid))

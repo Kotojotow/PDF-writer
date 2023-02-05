@@ -131,12 +131,56 @@ class attributes:
             database.commit()
             database.close()
         
-    def add_document(self):
-        self.Add_record()
+    def edit_record(self):
+        database = sqlite3.connect('data/baza_dokumenty.db')
+        c = database.cursor()
+        
+        command = """UPDATE klienci SET
+            zlece1 =:zlece1,
+            zlece2 =:zlece2,
+            msc1 =  :msc1,
+            msc2 =  :msc2,
+            k1 =    :k1,
+            k2 =    :k2,
+            k3 =    :k3,
+            k4 =    :k4,
+            k5 =    :k5,
+            st =    :st,
+            te =    :te,
+            op =    :op,
+            do =    :do,
+            da =    :da
+            
+            WHERE oid = :oid"""
+        
+        c.execute(command, 
+                  { "zlece1":self.zlece1,
+                    "zlece2":self.zlece2,
+                    "msc1"  :self.msc1,
+                    "msc2"  :self.msc2,
+                    "k1"    :self.k1,
+                    "k2"    :self.k2,
+                    "k3"    :self.k3,
+                    "k4"    :self.k4,
+                    "k5"    :self.k5,
+                    "st"    :self.st,
+                    "te"    :self.te,
+                    "op"    :self.op,
+                    "do"    :self.do,
+                    "da"    :self.da,
+                    "oid"   :self.oid
+            })
+        
+        database.commit()
+        database.close()
+        
+    def add_document(self,add = 0):
+        if add == 0:
+            self.Add_record()
         self.do_save = 1
         create_pdf(self)
         self.do_save = 0
-        messagebox.showinfo("Zapisano!","Pomyślnie zapisano dokument")
+        messagebox.askyesno("Zapisano!","Pomyślnie zapisano dokument")
         
     def owner_save(self):
         file = open("data/owner.xdd",'w')
