@@ -15,47 +15,62 @@ import C_Attributes
 
 def data_base():
     def view_click():
-        x = tree.focus()
-        details = tree.item(x, 'values')
-        name = "SELECT * from klienci where oid= " + details[5]
-        db = sqlite3.connect('data/baza_dokumenty.db')
-        curr = db.cursor()
-        curr.execute(name)
-        r = curr.fetchone()
-        document = C_Attributes.attributes(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13])
-        db.commit()
-        db.close()
-        
-        PDF_Writer.create_pdf(document)
-        startfile("pdf.pdf")
-        
-    def edit_click():
-        x = tree.focus()
-        details = tree.item(x, 'values')
-        name = "SELECT *,rowid from klienci where oid= " + details[5]
-        db = sqlite3.connect('data/baza_dokumenty.db')
-        curr = db.cursor()
-        curr.execute(name)
-        r = curr.fetchone()
-        document = C_Attributes.attributes(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13],oid=r[14])
-        db.commit()
-        db.close()
-        
-        C_Edit_record.edit_document(document)
-    
-    def delete_click():
-        x = tree.focus()
-        details = tree.item(x, 'values')
-        help_z = messagebox.askyesno("Ostrzeżenie!","Czy na pewno chcesz usunąć dokument nr: " + details[0]+" ?")
-        if help_z == 1:
+        try:
+            x = tree.focus()
+            details = tree.item(x, 'values')
+            name = "SELECT * from klienci where oid= " + details[5]
+        except IndexError:
+            messagebox.showerror("Błąd!","Wybierz element z listy.")
+        else: 
+            
             db = sqlite3.connect('data/baza_dokumenty.db')
             curr = db.cursor()
-            
-            help_f = "DELETE FROM klienci WHERE oid = " + details[5]
-            curr.execute(help_f)
+            curr.execute(name)
+            r = curr.fetchone()
+            document = C_Attributes.attributes(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13])
             db.commit()
             db.close()
-            tree.delete(x)
+            
+            PDF_Writer.create_pdf(document)
+            startfile("pdf.pdf")
+        
+    def edit_click():
+        try:
+            x = tree.focus()
+            details = tree.item(x, 'values')
+            name = "SELECT *,rowid from klienci where oid= " + details[5]
+        except IndexError:
+            messagebox.showerror("Błąd!","Wybierz element z listy.")
+        else: 
+
+            db = sqlite3.connect('data/baza_dokumenty.db')
+            curr = db.cursor()
+            curr.execute(name)
+            r = curr.fetchone()
+            document = C_Attributes.attributes(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13],oid=r[14])
+            db.commit()
+            db.close()
+            
+            C_Edit_record.edit_document(document)
+    
+    def delete_click():
+        try:
+            x = tree.focus()
+            details = tree.item(x, 'values')
+            help_z = messagebox.askyesno("Ostrzeżenie!","Czy na pewno chcesz usunąć dokument nr: " + details[0]+" ?")
+        except IndexError:
+            messagebox.showerror("Błąd!","Wybierz element z listy.")
+        else: 
+            
+            if help_z == 1:
+                db = sqlite3.connect('data/baza_dokumenty.db')
+                curr = db.cursor()
+                
+                help_f = "DELETE FROM klienci WHERE oid = " + details[5]
+                curr.execute(help_f)
+                db.commit()
+                db.close()
+                tree.delete(x)
         
     database = sqlite3.connect('data/baza_dokumenty.db')
     table = []

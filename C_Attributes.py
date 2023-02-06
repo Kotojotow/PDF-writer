@@ -86,6 +86,20 @@ class attributes:
         database.commit()
         database.close()
         
+        database1 = sqlite3.connect('data/baza_Klienci.db')
+        c1 = database1.cursor()
+        
+        c1.execute("""create table if not exists klienci(
+        nazwa1 text,
+        nazwa2 text,
+        nazwa3 text,
+        nazwa4 text,
+        nazwa5 text
+
+            )""")
+        database1.commit()
+        database1.close()
+        
     def Add_record(self):
         database = sqlite3.connect('data/baza_dokumenty.db')
         c = database.cursor()
@@ -180,7 +194,7 @@ class attributes:
         self.do_save = 1
         create_pdf(self)
         self.do_save = 0
-        messagebox.askyesno("Zapisano!","Pomyślnie zapisano dokument")
+        messagebox.showinfo("Zapisano!","Pomyślnie zapisano dokument")
         
     def owner_save(self):
         file = open("data/owner.xdd",'w')
