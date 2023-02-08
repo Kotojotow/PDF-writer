@@ -23,8 +23,9 @@ class Client:
                 return a
         
         zm = self.CEIDG(nip)
-        if zm == "<Response [200]>":#OK
-            pass
+        print (zm.status_code)
+        if zm.status_code == 200:#OK
+            print (zm.text)
         
         
         

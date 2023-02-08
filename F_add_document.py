@@ -14,6 +14,10 @@ from os import path
 from datetime import datetime
 
 def add_document():
+    
+    def character_limit(entry_text, max):
+        while hc.width_string(entry_text.get()) > max:
+            entry_text.set(entry_text.get()[:-1])
     def show_enters():
         nip = nip_input.win_entry.get()
         if nip != "":
@@ -63,6 +67,7 @@ def add_document():
     add_doc_screen.screen_handle.resizable(0,0)
     
     nip = ""
+    
     ####################### Frames ################################################
     frame1 = LabelFrame(add_doc_screen.screen_handle,text="Zleceniodawca")
     frame2 = LabelFrame(add_doc_screen.screen_handle,text="Zleceniobiorca")
@@ -110,3 +115,35 @@ def add_document():
     nip_input = hc.window_label(frame7,"Wprowadź nip kontrachenta: ",0,0,width=10)
     nip_button = Button(frame7, text="Potwierdź",command=show_enters)
     nip_button.grid(row=1,column=0,columnspan=2)
+
+    
+    zlec1.entry_text.trace("w", lambda *args: character_limit(zlec1.entry_text,213))
+    zlec2.entry_text.trace("w", lambda *args: character_limit(zlec2.entry_text,213))
+    zlec3.entry_text.trace("w", lambda *args: character_limit(zlec3.entry_text,213))
+    zlec4.entry_text.trace("w", lambda *args: character_limit(zlec4.entry_text,213))
+    zlec5.entry_text.trace("w", lambda *args: character_limit(zlec5.entry_text,213))
+    zlecb1.entry_text.trace("w", lambda *args: character_limit(zlecb1.entry_text,213))
+    zlecb2.entry_text.trace("w", lambda *args: character_limit(zlecb2.entry_text,213))
+    zlecb3.entry_text.trace("w", lambda *args: character_limit(zlecb3.entry_text,213))
+    zlecb4.entry_text.trace("w", lambda *args: character_limit(zlecb4.entry_text,213))
+    zlecb5.entry_text.trace("w", lambda *args: character_limit(zlecb5.entry_text,213))
+    zal1.entry_text.trace("w", lambda *args: character_limit(zal1.entry_text,213))
+    zal2.entry_text.trace("w", lambda *args: character_limit(zal2.entry_text,213))
+    zal3.entry_text.trace("w", lambda *args: character_limit(zal3.entry_text,213))
+    zal4.entry_text.trace("w", lambda *args: character_limit(zal4.entry_text,213))
+    zal5.entry_text.trace("w", lambda *args: character_limit(zal5.entry_text,213))
+    roz1.entry_text.trace("w", lambda *args: character_limit(roz1.entry_text,213))
+    roz2.entry_text.trace("w", lambda *args: character_limit(roz2.entry_text,213))
+    roz3.entry_text.trace("w", lambda *args: character_limit(roz3.entry_text,213))
+    roz4.entry_text.trace("w", lambda *args: character_limit(roz4.entry_text,213))
+    roz5.entry_text.trace("w", lambda *args: character_limit(roz5.entry_text,213))
+    kie1.entry_text.trace("w", lambda *args: character_limit(kie1.entry_text,260))
+    kie2.entry_text.trace("w", lambda *args: character_limit(kie2.entry_text,260))
+    kie3.entry_text.trace("w", lambda *args: character_limit(kie3.entry_text,260))
+    kie4.entry_text.trace("w", lambda *args: character_limit(kie4.entry_text,260))
+    kie5.entry_text.trace("w", lambda *args: character_limit(kie5.entry_text,260))
+    sta.entry_text.trace("w", lambda *args: character_limit(sta.entry_text,100))
+    ter.entry_text.trace("w", lambda *args: character_limit(ter.entry_text,100))
+    opi.entry_text.trace("w", lambda *args: character_limit(opi.entry_text,213))
+    dok.entry_text.trace("w", lambda *args: character_limit(dok.entry_text,110))
+    dat.entry_text.trace("w", lambda *args: character_limit(dat.entry_text,110))

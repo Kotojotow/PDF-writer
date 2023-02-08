@@ -5,6 +5,9 @@ from C_Attributes import *
 from C_help_class import *
 
 def F_owner_edit():
+    def character_limit(entry_text, max):
+        while width_string(entry_text.get()) > max:
+            entry_text.set(entry_text.get()[:-1])
     def owner_save1():
         dd.own_name1  = edit_screen1.win_entry.get()
         dd.own_name2  = edit_screen2.win_entry.get()
@@ -32,3 +35,9 @@ def F_owner_edit():
     Nip_button = Button(frame, text="Zapisz",padx=50,pady=10,command= owner_save1 )
     Nip_button.grid(column=1,row=6)
     frame.grid(column=0,row=0,padx=20,pady=20,ipadx=10,ipady=10)
+    
+    edit_screen1.entry_text.trace("w", lambda *args: character_limit(edit_screen1.entry_text,213))
+    edit_screen2.entry_text.trace("w", lambda *args: character_limit(edit_screen2.entry_text,213))
+    edit_screen3.entry_text.trace("w", lambda *args: character_limit(edit_screen3.entry_text,213))
+    edit_screen4.entry_text.trace("w", lambda *args: character_limit(edit_screen4.entry_text,213))
+    edit_screen5.entry_text.trace("w", lambda *args: character_limit(edit_screen5.entry_text,213))

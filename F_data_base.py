@@ -14,6 +14,14 @@ import C_Edit_record
 import C_Attributes
 
 def data_base():
+    def sort_column(tv, col, reverse):
+        l = [(tv.set(k, col), k) for k in tv.get_children('')]
+        l.sort(key=lambda t: t[0], reverse=reverse)
+
+        for index, (val, k) in enumerate(l):
+            tv.move(k, '', index)
+
+        tv.heading(col, command=lambda: sort_column(tv, col, not reverse))
     def view_click():
         try:
             x = tree.focus()
@@ -52,6 +60,7 @@ def data_base():
             db.close()
             
             C_Edit_record.edit_document(document)
+            baza_screen.destroy()
     
     def delete_click():
         try:
@@ -89,7 +98,6 @@ def data_base():
         database.close()
         baza_screen = hc.ME_new_window('Baza Dokumentów',"780x400+20+20")
         baza_screen.screen_handle.resizable(0,0)
-        baza_screen.screen_handle.attributes('-topmost', True)
         
         tree = ttk.Treeview(baza_screen.screen_handle, columns=('nr_dok','zleceniobiorca','cena','data','termin','id'))
         s = ttk.Scrollbar(baza_screen.screen_handle, orient=VERTICAL, command=tree.yview)
@@ -117,10 +125,13 @@ def data_base():
         tree.column("id", width=0,stretch='NO')
         
         tree.heading('#0',text='',anchor='w')
-        tree.heading('nr_dok', text = 'Numer Dokumentu')
-        tree.heading('zleceniobiorca', text='zleceniobiorca')
-        tree.heading('cena', text='cena')
-        tree.heading('data', text='data')
-        tree.heading('termin', text='termin')
+        tree.heading('nr_dok', text = 'Numer Dokumentu', command=lambda: sort_column(tree, "nr_dok", False))
+        tree.heading('zleceniobiorca', text='zleceniobiorca', command=lambda: sort_column(tree, "zleceniobiorca", False))
+        tree.heading('cena', text='cena', command=lambda: sort_column(tree, "cena", False))
+        tree.heading('data', text='data', command=lambda: sort_column(tree, "data", False))
+        tree.heading('termin', text='termin', command=lambda: sort_column(tree, "termin", False))
+        
+        
+        
         for a in range(len(table)):
             tree.insert('', 'end',iid=a,values=(table[a].do, hc.one_string(table[a].zlece2,first=1) , table[a].st,table[a].da,table[a].te,table[a].oid))

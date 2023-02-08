@@ -1,10 +1,13 @@
 from tkinter import Button
-from tkinter import messagebox 
 
 import C_help_class as hc
 import C_Attributes as wc
+import F_data_base
 
 def edit_document(doc_statemant = wc.attributes):
+    def character_limit(entry_text, max):
+        while hc.width_string(entry_text.get()) > max:
+            entry_text.set(entry_text.get()[:-1])
     def check_out():
         doc_statemant.zlece1 = hc.five_string(zlec1.win_entry.get(),zlec2.win_entry.get(),zlec3.win_entry.get(),zlec4.win_entry.get(),zlec5.win_entry.get() )
         doc_statemant.zlece2 = hc.five_string(zlecb1.win_entry.get(),zlecb2.win_entry.get(),zlecb3.win_entry.get(),zlecb4.win_entry.get(),zlecb5.win_entry.get() )
@@ -23,6 +26,7 @@ def edit_document(doc_statemant = wc.attributes):
         doc_statemant.add_document(add=1)
         doc_statemant.edit_record()
         
+        F_data_base.data_base()
         edit_doc_screen.destroy()
     
     tab1 = hc.one_string(doc_statemant.zlece1)
@@ -32,9 +36,6 @@ def edit_document(doc_statemant = wc.attributes):
     
     edit_doc_screen = hc.ME_new_window('Edytuj Dokument',"820x570+20+20")
     edit_doc_screen.screen_handle.resizable(0,0)
-    edit_doc_screen.screen_handle.attributes('-topmost', True)
-    # edit_doc_screen.screen_handle.update()
-    # edit_doc_screen.screen_handle.attributes('-topmost', False)
 
     zlec_label = hc.window_label1(edit_doc_screen.screen_handle,"Zleceniodawca:",1,0)
 
@@ -83,3 +84,33 @@ def edit_document(doc_statemant = wc.attributes):
 
     view_button = Button(edit_doc_screen.screen_handle, text="Zapisz",padx=350,pady=16, command= check_out )
     view_button.grid(column=0,row=23,columnspan=4,pady=15)
+    
+    zlec1.entry_text.trace("w", lambda *args: character_limit(zlec1.entry_text,213))
+    zlec2.entry_text.trace("w", lambda *args: character_limit(zlec2.entry_text,213))
+    zlec3.entry_text.trace("w", lambda *args: character_limit(zlec3.entry_text,213))
+    zlec4.entry_text.trace("w", lambda *args: character_limit(zlec4.entry_text,213))
+    zlec5.entry_text.trace("w", lambda *args: character_limit(zlec5.entry_text,213))
+    zlecb1.entry_text.trace("w", lambda *args: character_limit(zlecb1.entry_text,213))
+    zlecb2.entry_text.trace("w", lambda *args: character_limit(zlecb2.entry_text,213))
+    zlecb3.entry_text.trace("w", lambda *args: character_limit(zlecb3.entry_text,213))
+    zlecb4.entry_text.trace("w", lambda *args: character_limit(zlecb4.entry_text,213))
+    zlecb5.entry_text.trace("w", lambda *args: character_limit(zlecb5.entry_text,213))
+    zal1.entry_text.trace("w", lambda *args: character_limit(zal1.entry_text,213))
+    zal2.entry_text.trace("w", lambda *args: character_limit(zal2.entry_text,213))
+    zal3.entry_text.trace("w", lambda *args: character_limit(zal3.entry_text,213))
+    zal4.entry_text.trace("w", lambda *args: character_limit(zal4.entry_text,213))
+    zal5.entry_text.trace("w", lambda *args: character_limit(zal5.entry_text,213))
+    roz1.entry_text.trace("w", lambda *args: character_limit(roz1.entry_text,213))
+    roz2.entry_text.trace("w", lambda *args: character_limit(roz2.entry_text,213))
+    roz3.entry_text.trace("w", lambda *args: character_limit(roz3.entry_text,213))
+    roz4.entry_text.trace("w", lambda *args: character_limit(roz4.entry_text,213))
+    roz5.entry_text.trace("w", lambda *args: character_limit(roz5.entry_text,213))
+    kie1.entry_text.trace("w", lambda *args: character_limit(kie1.entry_text,260))
+    kie2.entry_text.trace("w", lambda *args: character_limit(kie2.entry_text,260))
+    kie3.entry_text.trace("w", lambda *args: character_limit(kie3.entry_text,260))
+    kie4.entry_text.trace("w", lambda *args: character_limit(kie4.entry_text,260))
+    kie5.entry_text.trace("w", lambda *args: character_limit(kie5.entry_text,260))
+    sta.entry_text.trace("w", lambda *args: character_limit(sta.entry_text,100))
+    ter.entry_text.trace("w", lambda *args: character_limit(ter.entry_text,100))
+    opi.entry_text.trace("w", lambda *args: character_limit(opi.entry_text,213))
+    dat.entry_text.trace("w", lambda *args: character_limit(dat.entry_text,110))

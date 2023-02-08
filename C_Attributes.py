@@ -211,6 +211,6 @@ class attributes:
         file.write("dir="+self.own_dir)
         file.write("\n")
         file.close()
-        messagebox.showinfo("Zapisano!","Pomyślnie zapisano dane firmy!")
+        messagebox.showinfo("Zapisano!","Pomyślnie zapisano dane!")
         
 dd = attributes("","","","","","","","","","","","","","")
